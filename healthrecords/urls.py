@@ -4,7 +4,7 @@ from .views import HealthRecordViewSet
 
 
 router = DefaultRouter()
-router.register(r'records', HealthRecordViewSet, basename='healthrecord')
+router.register(r'healthrecords', HealthRecordViewSet, basename='healthrecord')
 
 urlpatterns = [
     path('', include(router.urls)),
