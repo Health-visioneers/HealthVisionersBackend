@@ -230,3 +230,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+
+
+
+
+# agora 
+
+# https://www.agora.io/en/blog/build-a-scalable-video-chat-app-with-agora-in-django/
