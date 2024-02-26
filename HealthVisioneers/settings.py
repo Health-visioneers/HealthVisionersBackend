@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'import_export',
     'corsheaders',
     'rest_framework',
+    # 'rest_framework.authtoken',
+    # 'userauth',
     'healthrecords',
 ]
 
@@ -129,12 +131,29 @@ STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
+# https://www.guguweb.com/2022/01/23/django-rest-framework-authentication-the-easy-way/
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.SessionAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
 
 
 CORS_ALLOW_ALL_ORIGINS = True

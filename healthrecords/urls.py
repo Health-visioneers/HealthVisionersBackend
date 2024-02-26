@@ -1,7 +1,14 @@
-from django.urls import path
-from . import views
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from .views import HealthRecordViewSet 
 
+
+router = DefaultRouter()
+router.register(r'records', HealthRecordViewSet, basename='healthrecord')
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', include(router.urls)),
 ]
+
+
+
