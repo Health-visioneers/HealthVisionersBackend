@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lwt6$(*&9k=i(8j@ouct0j*!%j71n&zxbd#-^#lgfr&^ofswij'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1' , 'healthvisioneers.jerryhaxor.me']
 
@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     # 'rest_framework.authtoken',
-    # 'userauth',
+    'users',
     'healthrecords',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -199,16 +201,39 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
 
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
-
-# USE_S3 = os.getenv('USE_S3') == 'TRUE'
-
-# if USE_S3:
-#     # aws settings
-#     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-#     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 #     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 #     AWS_DEFAULT_ACL = None
 #     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
