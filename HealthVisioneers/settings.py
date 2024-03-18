@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'healthrecords',
     'crispy_forms',
     'crispy_bootstrap5',
+    'medicalgroq',
 ]
 
 MIDDLEWARE = [
@@ -212,7 +213,12 @@ LOGOUT_REDIRECT_URL = 'login'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 
 
 

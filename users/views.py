@@ -5,6 +5,9 @@ from .forms import SignUpForm, LoginForm
 from django.contrib.auth import views as auth_views
 
 def UserSignup(request, user_type):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if user_type == 'patient':
         form_class = SignUpForm
     elif user_type == 'doctor':
@@ -39,6 +42,11 @@ def UserSignup(request, user_type):
 class UserLoginView(LoginView):
     form_class = LoginForm
     template_name = 'login.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         remember_me = self.request.POST.get('remember_me')

@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
+{% extends 'base_generic.html' %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+
     <h1>Welcome to the Home Page ! {{ user_type }}</h1>
     <p>This is the content of the home page.</p>
     <br>
@@ -13,5 +12,5 @@
             <button type="submit">logout</button>
         </form>
     {% endif %}
-</body>
-</html>
+    
+{% endblock %}

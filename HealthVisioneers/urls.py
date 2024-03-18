@@ -23,6 +23,7 @@ urlpatterns = [
     # path('logout/', auth_views.LogoutView.as_view(),name='logout'),
     path('', include('users.urls')),
     path('apis/', include('healthrecords.urls')),
+    path('', include('medicalgroq.urls')),
 ]
 
 from django.conf import settings
