@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'medicalgroq',
+    'prescription',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

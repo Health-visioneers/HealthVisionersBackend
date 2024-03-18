@@ -39,6 +39,7 @@ class Doctor(models.Model):
     specialty = models.CharField(max_length=100)
     license_number = models.CharField(max_length=100)
     years_of_experience = models.IntegerField(null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='doctors' , default=None)
     hospital = models.ForeignKey('Hospital', on_delete=models.CASCADE, related_name='doctors')
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -68,6 +69,9 @@ class Hospital(models.Model):
     is_active = models.BooleanField(default=True)
     departments = models.ManyToManyField('Department', related_name='hospitals')
     created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return self.name
 
 
 
@@ -75,3 +79,6 @@ class Department(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return self.name

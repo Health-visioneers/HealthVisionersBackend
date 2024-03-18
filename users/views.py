@@ -60,15 +60,47 @@ class UserLoginView(LoginView):
 class UserLogoutView(auth_views.LogoutView):
     next_page = 'login'  # Redirect to home page after logout
     
+    
+    
+    
+from .forms import PatientForm, DoctorForm, HospitalStaffForm
+from .models import Patient, Doctor, HospitalStaff
+
 def userhome(request):
     if request.user.is_authenticated:
-        context={}
+        context = {}
+        form = None
         if request.user.is_patient:
             context['user_type'] = 'patient'
+            if not Patient.objects.filter(user=request.user).exists():
+                form = PatientForm(request.POST or None)
+            else:
+                return render(request, 'home.html')
         elif request.user.is_doctor:
             context['user_type'] = 'doctor'
+            if not Doctor.objects.filter(user=request.user).exists():
+                form = DoctorForm(request.POST or None)
+            else:
+                return render(request, 'home.html')
         elif request.user.is_hospital_staff:
             context['user_type'] = 'hospital_staff'
-        return render(request, 'home.html', context)
+            if not HospitalStaff.objects.filter(user=request.user).exists():
+                form = HospitalStaffForm(request.POST or None)
+            else:
+                return render(request, 'home.html')
+
+        if form and form.is_valid():
+            if request.user.is_patient:
+                patient = Patient.objects.create(user=request.user, **form.cleaned_data)
+                return redirect('home')
+            elif request.user.is_doctor:
+                doctor = Doctor.objects.create(user=request.user, **form.cleaned_data)
+                return redirect('home')
+            elif request.user.is_hospital_staff:
+                hospital_staff = HospitalStaff.objects.create(user=request.user, **form.cleaned_data)
+                return redirect('home')
+
+        context['form'] = form
+        return render(request, 'details.html', context)
     else:
         return render(request, 'home.html')
