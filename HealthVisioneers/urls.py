@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('apis/', include('healthrecords.urls')),
     path('', include('medicalgroq.urls')),
+    path('', include('prescription.urls')),
 ]
 
 from django.conf import settings

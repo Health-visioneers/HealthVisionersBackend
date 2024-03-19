@@ -10,10 +10,12 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date = models.DateTimeField()
+    status = models.BooleanField(default=False, help_text="True if the appointment is confirmed")
     # other fields...
 
     def __str__(self):
         return f"Appointment on {self.date} with {self.doctor.name}"
+
 
 class Medicine(models.Model):
     name = models.CharField(max_length=255)

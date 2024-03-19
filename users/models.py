@@ -29,6 +29,8 @@ class Patient(models.Model):
         self.medical_record_number = md5_hash
         super().save(*args, **kwargs)
         
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
         
         
 class Doctor(models.Model):
@@ -42,6 +44,9 @@ class Doctor(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='doctors' , default=None)
     hospital = models.ForeignKey('Hospital', on_delete=models.CASCADE, related_name='doctors')
     created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
 
 
 class HospitalStaff(models.Model):

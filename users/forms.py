@@ -34,6 +34,7 @@ class DoctorForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['hospital'].queryset = Hospital.objects.filter(is_active=True)
 
+
 class HospitalStaffForm(forms.ModelForm):
     class Meta:
         model = HospitalStaff
