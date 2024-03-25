@@ -18,6 +18,7 @@ class Appointment(models.Model):
     confirmed = models.BooleanField(default=False, help_text="True if the appointment is confirmed")
     meeting_id = models.IntegerField(unique=True, null=True)
 
+    @staticmethod
     def generate_unique_meeting_id():
         while True:
             random_id = random.randint(100000, 999999)
@@ -26,7 +27,7 @@ class Appointment(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.meeting_id:
-            self.meeting_id = self.generate_unique_meeting_id()
+            self.meeting_id = Appointment.generate_unique_meeting_id()
         super().save(*args, **kwargs)
 
     def __str__(self):
