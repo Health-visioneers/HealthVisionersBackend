@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'medicalgroq',
     'prescription',
     'django_extensions',
+    'meeting',
 ]
 
 MIDDLEWARE = [

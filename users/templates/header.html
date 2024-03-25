@@ -11,6 +11,18 @@
                     <a class="nav-link" href="{% url 'chat_view' %}">Medical-Chat-Bot</a>
                 </li>
                 {% if request.user.is_authenticated %}
+
+                {% if request.user.is_patient %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'book_appointment' %}">Book Appointment</a>
+                </li>
+                {% endif %}
+
+                {% if request.user.is_doctor or  request.user.is_patient %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'appointments' %}">Your Appointments</a>
+                </li>
+                {% endif %}
                 <li class="nav-item" >
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}

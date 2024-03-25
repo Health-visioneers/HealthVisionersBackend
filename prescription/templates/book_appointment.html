@@ -1,13 +1,72 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
+<head>
+    <style>
+
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #bookAppointmentForm {
+            width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #aaa;
+        }
+
+        #bookAppointmentForm button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
     <h2>Book Appointment</h2>
-    <form method="post">
+    <form method="post" id="bookAppointmentForm">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Book</button>
     </form>
     <script>
         document.getElementById('id_date').type = 'date';
+
+        document.getElementById('id_date').addEventListener('change', function() {
+            var date = this.value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/get_available_times/?date=' + date);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var times = JSON.parse(xhr.responseText);
+                    var start_time = document.getElementById('start_time');
+                    var end_time = document.getElementById('end_time');
+                    start_time.innerHTML = '';
+                    end_time.innerHTML = '';
+                    for (var i = 0; i < times.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = times[i];
+                        option.text = times[i];
+                        start_time.appendChild(option);
+                        end_time.appendChild(option.cloneNode(true));
+                    }
+                }
+            };
+            xhr.send();
+        });
     </script>
+</body>
 {% endblock %}

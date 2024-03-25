@@ -1,0 +1,106 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<head>
+    <style>
+        #appointment-table {
+            width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        #appointment-table th, #appointment-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #appointment-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #appointment-table tr:hover {
+            background-color: #ddd;
+        }
+
+        #appointment-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        #confirm-button {
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        #confirm-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Appointments</h2>
+    {% if appointments %}
+        <table id="appointment-table">
+            <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Description</th>
+                <th>Status</th>
+                {% if request.user.is_authenticated and request.user.is_doctor %}
+                <th>Action</th>
+                {% endif %}
+            </tr>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient }}</td>
+                    <td>{{ appointment.doctor }}</td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.start_time }}</td>
+                    <td>{{ appointment.end_time }}</td>
+                    <td>{{ appointment.description }}</td>
+                    <td>
+                        {% if appointment.status %}
+                            {% if appointment.confirmed %}
+                                <span style="color: green;">Confirmed</span>
+                            {% else %}
+                                <span style="color: red;">Cancelled</span>
+                            {% endif %}
+                        {% else %}
+                            <span style="color: orange;">Pending</span>
+                        {% endif %}
+                    </td>
+                    {% if request.user.is_authenticated and request.user.is_doctor and not appointment.status %}
+                    <td>
+                        <div style="display: flex; justify-content: space-around;">
+                            <form method="post" action="{% url 'confirm_appointment' appointment.id %}" style="margin:0 10px;">
+                                {% csrf_token %}
+                                <input id="confirm-button" class="btn btn-primary" type="submit" value="Confirm Appointment">
+                            </form>
+                            <form method="post" action="{% url 'cancel_appointment' appointment.id %}">
+                                {% csrf_token %}
+                                <input id="cancel-button" class="btn btn-danger" type="submit" value="Cancel Appointment">
+                            </form>
+                        </div>
+                    </td>
+                    {% elif request.user.is_authenticated and request.user.is_doctor and appointment.confirmed %}
+                        <td>
+                            <a href="{% url 'prescribe_medicine' appointment.id %}" class="btn btn-success">Prescribe Medicine</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No appointments found.</p>
+    {% endif %}
+</body>
+{% endblock %}
