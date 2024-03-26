@@ -17,6 +17,7 @@ class Appointment(models.Model):
     status = models.BooleanField(default=False, help_text="false if the appointment is Pending")
     confirmed = models.BooleanField(default=False, help_text="True if the appointment is confirmed")
     meeting_id = models.IntegerField(unique=True, null=True)
+    prescribed = models.BooleanField(default=False)
 
     @staticmethod
     def generate_unique_meeting_id():
