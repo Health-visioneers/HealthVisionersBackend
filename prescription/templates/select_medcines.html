@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Medicines</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{% static 'filter_multi_select.css' %}" />
+</head>
+<body>
+    {% include 'header.html' %}
+    <div  class="container"  style="margin-top:10px;">
+        <h1>Select the medicines to prescribe</h1>
+        <form id="medicine-form" method="post">
+            {% csrf_token %}
+            <input type="text" value="{{ appointment_id }}" hidden>
+            <select multiple name="medicine" id="medicines">
+                <!-- The options will be populated with JavaScript -->
+            </select>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{% static 'filter-multi-select-bundle.min.js' %}"></script>
+    <script>
+        fetch('/search_medicines/')
+            .then(response => response.json())
+            .then(medicines => {
+                const medicineSelect = $('#medicines');
+                medicines.forEach(medicine => {
+                    medicineSelect.append(new Option(medicine.name, medicine.id));
+                });
+                medicineSelect.filterMultiSelect({
+                    placeholderText: "No medicine selected",
+                    filterText: "Filter medicines",
+                    selectAllText: "Select All",
+                    selectionLimit: 0,
+                    caseSensitive: false,
+                    allowEnablingAndDisabling: true,
+                    useCheckboxes: true,  // Use checkboxes
+                });
+            });
+
+        document.getElementById('medicine-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selectedMedicines = $('#medicines').val();
+            const appointmentId = document.getElementById('appointment-id').value; 
+            fetch('/prescribe_medicine/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({medicines: selectedMedicines, appointment_id: appointmentId})  // Include the appointment ID in the request body
+            });
+        });
+    </script>
+</body>
+</html>

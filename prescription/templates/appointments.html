@@ -55,7 +55,7 @@
                 <th>End Time</th>
                 <th>Description</th>
                 <th>Status</th>
-                {% if request.user.is_authenticated and request.user.is_doctor %}
+                {% if request.user.is_authenticated %}
                 <th>Action</th>
                 {% endif %}
             </tr>
@@ -94,6 +94,20 @@
                     {% elif request.user.is_authenticated and request.user.is_doctor and appointment.confirmed %}
                         <td>
                             <a href="{% url 'prescribe_medicine' appointment.id %}" class="btn btn-success">Prescribe Medicine</a>
+
+                            {% if appointment.meeting_id %}
+                                <a href="{% url 'meeting' appointment.meeting_id %}" class="btn btn-success">Meeting</a>
+                            {% else %}
+                                <span class="btn btn-success disabled">No Meeting</span>
+                            {% endif %}
+                        </td>
+                    {% elif request.user.is_authenticated and request.user.is_patient and appointment.confirmed %}
+                        <td>
+                            {% if appointment.meeting_id %}
+                                <a href="{% url 'meeting' appointment.meeting_id %}" class="btn btn-success">Meeting</a>
+                            {% else %}
+                                <span class="btn btn-success disabled">No Meeting</span>
+                            {% endif %}
                         </td>
                     {% endif %}
                 </tr>

@@ -109,20 +109,41 @@ def cancel_appointment(request, pk):
 
 
 from .forms import PrescriptionForm
+from django.shortcuts import get_object_or_404
+
+from django.shortcuts import redirect
+from .models import Appointment, Prescription
+from .forms import PrescriptionForm
 
 def prescribe_medicine(request, appointment_id):
     if request.method == 'POST':
-        form = PrescriptionForm(request.POST)
-        if form.is_valid():
-            prescription = form.save(commit=False)
-            prescription.appointment_id = appointment_id
-            prescription.save()
-            return redirect('prescription_list')
+        
+        return redirect('prescription_list')
     else:
-        form = PrescriptionForm()
-    return render(request, 'prescribe_medicine.html', {'form': form})
+        appointment = get_object_or_404(Appointment, pk=appointment_id)
+        patient = appointment.patient
+        print(patient)
+        
+    return render(request, 'select_medcines.html', {'appointment_id': appointment_id, 'patient': patient})
 
 
 def patient_prescriptions(request, patient_id):
     prescriptions = Prescription.objects.filter(appointment__patient_id=patient_id)
     return render(request, 'patient_prescriptions.html', {'prescriptions': prescriptions})
+
+
+from django.http import JsonResponse
+from django.views import View
+from django.db.models import Q
+from .models import Medicine
+
+class SearchMedicineView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '')
+        medicines = Medicine.objects.filter(
+            Q(name__icontains=query) |
+            Q(manufacturer__icontains=query) |
+            Q(type__icontains=query)
+        )[:20]
+        medicines_json = list(medicines.values('id', 'name'))
+        return JsonResponse(medicines_json, safe=False)

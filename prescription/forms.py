@@ -41,6 +41,9 @@ class AppointmentForm(forms.ModelForm):
 
         return cleaned_data
 
+
+
+
 class PrescriptionForm(forms.ModelForm):
     class Meta:
         model = Prescription

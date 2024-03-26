@@ -10,7 +10,6 @@ def generate_meetingid():
     return r
 
 
-def meetings(request):
-    name  = "jerryhaxor"
-    id  = 511231
-    return render(request, 'config.html', {'fullname' : name, 'meeting_id' : id})
+def meetings(request, meeting_id):
+    name  = request.user.first_name + ' ' + request.user.last_name
+    return render(request, 'config.html', {'fullname' : name, 'meeting_id' : meeting_id})
