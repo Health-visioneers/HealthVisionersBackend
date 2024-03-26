@@ -93,7 +93,7 @@
                     </td>
                     {% elif request.user.is_authenticated and request.user.is_doctor and appointment.confirmed %}
                         <td>
-                            <a href="{% url 'prescribe_medicine' appointment.id %}" class="btn btn-success">Prescribe Medicine</a>
+                            <a href="{% url 'prescribe_medicine' appointment.id %}" class="btn btn-info">Prescribe Medicine</a>
 
                             {% if appointment.meeting_id %}
                                 <a href="{% url 'meeting' appointment.meeting_id %}" class="btn btn-success">Meeting</a>

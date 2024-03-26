@@ -4,7 +4,28 @@
 <head>
     <title>Select Medicines</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="{% static 'filter_multi_select.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Change the background color and text color of the selected options */
+        .select2-results__option[aria-selected=true] {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Change the background color and text color of the selected options when they are highlighted */
+        .select2-results__option--highlighted[aria-selected=true] {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .select2-selection__choice__display {
+            background-color: #77b9ff;
+            color: #ffffff;
+        }
+        .select2-selection__choice__remove {
+            background-color: red !important;
+            color: black !important;
+        }
+    </style>
 </head>
 <body>
     {% include 'header.html' %}
@@ -13,37 +34,39 @@
         <form id="medicine-form" method="post">
             {% csrf_token %}
             <input type="text" id="appointment_id" name="appointment_id" value="{{ appointment_id }}" hidden>
-            <select multiple name="medicines" id="medicines">
+            <select name="medicines" id="medicines" multiple="multiple" style="width: 100%;" title="Select Medicines">
                 <!-- The options will be populated with JavaScript -->
             </select>
-            <br>
+            <br><br>
             <button type="submit">Submit</button>
         </form>
     </div>
-    
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="{% static 'filter-multi-select-bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
-        fetch('/search_medicines/')
-            .then(response => response.json())
-            .then(medicines => {
-                const medicineSelect = $('#medicines');
-                medicines.forEach(medicine => {
-                    medicineSelect.append(new Option(medicine.name, medicine.id));
-                });
-                medicineSelect.filterMultiSelect({
-                    placeholderText: "No medicine selected",
-                    filterText: "Filter medicines",
-                    selectAllText: "Select All",
-                    selectionLimit: 0,
-                    caseSensitive: false,
-                    allowEnablingAndDisabling: true,
-                    useCheckboxes: true,  // Use checkboxes
-                });
-            });
-        
-        
+        $('#medicines').select2({
+            placeholder: 'Search to Select medicines',
+            ajax: {
+                url: '/search_medicines/',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function(item) {
+                            return { id: item.id, text: item.name };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1,
+        });
     </script>
 </body>
 </html>
