@@ -6,10 +6,6 @@
         {% for prescription in prescriptions %}
             <li>
                 <h3>{{ prescription.medicine.name }}</h3>
-                <p>Dosage: {{ prescription.dosage }}</p>
-                <p>Days to take: {{ prescription.days_to_take }}</p>
-                <p>Times per day: {{ prescription.times_per_day }}</p>
-                <p>Instructions: {{ prescription.instructions }}</p>
             </li>
         {% empty %}
             <li>No prescriptions.</li>

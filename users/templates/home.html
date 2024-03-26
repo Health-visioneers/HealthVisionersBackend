@@ -3,8 +3,8 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-    <h1>Welcome to the Home Page ! {{ user_type }}</h1>
-    <p>This is the content of the home page.</p>
+    <h1>Welcome to the Home Page ! {{ request.user.first_name }}</h1>
+    <p>Explore the options in the the menu</p>
     <br>
     {% if request.user.is_authenticated %}
         <form method="post" action="{% url 'logout' %}">

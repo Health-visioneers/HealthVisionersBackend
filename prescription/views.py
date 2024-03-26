@@ -117,8 +117,15 @@ from .forms import PrescriptionForm
 
 def prescribe_medicine(request, appointment_id):
     if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        prescription = request.POST.getlist('medicines')
         
-        return redirect('prescription_list')
+        for medicine_id in prescription:
+            prescription = Prescription(appointment_id=appointment_id, medicine_id=medicine_id)
+            prescription.save()
+        # Redirect to the details page for the appointment
+        
+        return redirect('appointments')
     else:
         appointment = get_object_or_404(Appointment, pk=appointment_id)
         patient = appointment.patient
@@ -127,8 +134,8 @@ def prescribe_medicine(request, appointment_id):
     return render(request, 'select_medcines.html', {'appointment_id': appointment_id, 'patient': patient})
 
 
-def patient_prescriptions(request, patient_id):
-    prescriptions = Prescription.objects.filter(appointment__patient_id=patient_id)
+def patient_prescriptions(request, appointment_id):
+    prescriptions = Prescription.objects.filter(appointment__id=appointment_id)
     return render(request, 'patient_prescriptions.html', {'prescriptions': prescriptions})
 
 
@@ -144,6 +151,6 @@ class SearchMedicineView(View):
             Q(name__icontains=query) |
             Q(manufacturer__icontains=query) |
             Q(type__icontains=query)
-        )[:20]
+        )[:30]
         medicines_json = list(medicines.values('id', 'name'))
         return JsonResponse(medicines_json, safe=False)

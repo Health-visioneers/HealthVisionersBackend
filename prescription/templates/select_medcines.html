@@ -12,8 +12,8 @@
         <h1>Select the medicines to prescribe</h1>
         <form id="medicine-form" method="post">
             {% csrf_token %}
-            <input type="text" value="{{ appointment_id }}" hidden>
-            <select multiple name="medicine" id="medicines">
+            <input type="text" id="appointment_id" name="appointment_id" value="{{ appointment_id }}" hidden>
+            <select multiple name="medicines" id="medicines">
                 <!-- The options will be populated with JavaScript -->
             </select>
             <br>
@@ -42,20 +42,8 @@
                     useCheckboxes: true,  // Use checkboxes
                 });
             });
-
-        document.getElementById('medicine-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const selectedMedicines = $('#medicines').val();
-            const appointmentId = document.getElementById('appointment-id').value; 
-            fetch('/prescribe_medicine/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({medicines: selectedMedicines, appointment_id: appointmentId})  // Include the appointment ID in the request body
-            });
-        });
+        
+        
     </script>
 </body>
 </html>
