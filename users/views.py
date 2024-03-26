@@ -103,4 +103,4 @@ def userhome(request):
         context['form'] = form
         return render(request, 'details.html', context)
     else:
-        return render(request, 'home.html')
+        return redirect('login')
