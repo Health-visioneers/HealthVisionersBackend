@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('medicalgroq.urls')),
     path('', include('prescription.urls')),
     path('', include('meeting.urls')),
+    path('', include('medicalrecords.urls')),
 ]
 
 from django.conf import settings

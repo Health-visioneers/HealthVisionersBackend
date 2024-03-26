@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'prescription',
     'django_extensions',
     'meeting',
+    'medicalrecords',
 ]
 
 MIDDLEWARE = [

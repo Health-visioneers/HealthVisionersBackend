@@ -1,8 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base_generic.html' %}
+
+
+{% block content %}
+
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Select Medicines</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
@@ -29,7 +31,6 @@
     </style>
 </head>
 <body>
-    {% include 'header.html' %}
     <div  class="container"  style="margin-top:10px;">
         <h1>Select the medicines to prescribe</h1>
         <form id="medicine-form" method="post">
@@ -70,4 +71,5 @@
         });
     </script>
 </body>
-</html>
+
+{% endblock %}

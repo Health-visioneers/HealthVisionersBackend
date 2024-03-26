@@ -1,16 +1,13 @@
-from django.shortcuts import render, redirect
-from .models import Appointment, Prescription
-from .forms import AppointmentForm
-from users.models import Patient
-
-from django.http import JsonResponse
-from django.db.models import Q
 from datetime import datetime
-
-from django.shortcuts import render
-from .models import Appointment, Patient, Doctor
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Appointment, Prescription, Medicine
+from .forms import AppointmentForm, PrescriptionForm
+from users.models import Patient, Doctor
+from django.views import View
 
 def book_appointment(request):
     if request.method == 'POST':
@@ -108,12 +105,7 @@ def cancel_appointment(request, pk):
 
 
 
-from .forms import PrescriptionForm
-from django.shortcuts import get_object_or_404
 
-from django.shortcuts import redirect
-from .models import Appointment, Prescription
-from .forms import PrescriptionForm
 
 def prescribe_medicine(request, appointment_id):
     if request.method == 'POST':
@@ -142,10 +134,7 @@ def patient_prescriptions(request, appointment_id):
     return render(request, 'patient_prescriptions.html', {'prescriptions': prescriptions})
 
 
-from django.http import JsonResponse
-from django.views import View
-from django.db.models import Q
-from .models import Medicine
+
 
 class SearchMedicineView(View):
     def get(self, request, *args, **kwargs):
@@ -153,9 +142,9 @@ class SearchMedicineView(View):
         medicines = Medicine.objects.filter(
             Q(name__icontains=query) |
             Q(manufacturer__icontains=query) |
-            Q(type__icontains=query) |
-            Q(short_composition1__icontains=query) |
-            Q(short_composition2__icontains=query)
-        )[:30]
+            Q(type__icontains=query) 
+            # | Q(short_composition1__icontains=query) 
+            # | Q(short_composition2__icontains=query)
+        )
         medicines_json = list(medicines.values('id', 'name'))
         return JsonResponse(medicines_json, safe=False)

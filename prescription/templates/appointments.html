@@ -112,7 +112,6 @@
                                 {% else %}
                                     <span class="btn btn-success disabled">No Meeting</span>
                                 {% endif %}
-                                <br><br>
                             {% elif appointment.prescribed %}
                                 <a href="{% url 'patient_prescriptions' appointment.id %}" class="btn btn-info">Prescription</a>
                             {% endif %}
