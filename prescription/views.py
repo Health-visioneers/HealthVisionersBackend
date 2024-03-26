@@ -153,7 +153,9 @@ class SearchMedicineView(View):
         medicines = Medicine.objects.filter(
             Q(name__icontains=query) |
             Q(manufacturer__icontains=query) |
-            Q(type__icontains=query)
+            Q(type__icontains=query) |
+            Q(short_composition1__icontains=query) |
+            Q(short_composition2__icontains=query)
         )[:30]
         medicines_json = list(medicines.values('id', 'name'))
         return JsonResponse(medicines_json, safe=False)
