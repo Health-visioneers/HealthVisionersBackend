@@ -1,16 +1,128 @@
 {% extends 'base_generic.html' %}
-
+{% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
 
-    <h1>Welcome to the Home Page ! {{ request.user.first_name }}</h1>
-    <p>Explore the options in the the menu</p>
-    <br>
-    {% if request.user.is_authenticated %}
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">logout</button>
-        </form>
-    {% endif %}
-    
+    <div class="container">
+        <div class="jumbotron mt-3">
+            <h1 class="display-4">Welcome, {{ request.user.first_name }}!</h1>
+            <hr class="my-4">
+            <center>
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="nav-link" href="{% url 'chat_view' %}" >
+                        <img src="https://d2jx2rerrg6sh3.cloudfront.net/image-handler/ts/20220504114113/ri/950/src/images/Article_Images/ImageForArticle_22457_16516788730473249.jpg" class="img-fluid" alt="Medical Chat Bot" style="width: 250px; height: 100px;object-fit:contain">
+                        <p>Medical Chat Bot</p>
+                    </a>
+                </div>
+                {% if request.user.is_patient %}
+                    <div class="col-md-3">
+                        <a class="nav-link active" href="{% url 'book_appointment' %}">
+                            <img src="https://imgs.search.brave.com/8ZSpY5WGzIPqxFXyt9ePOEvcd7udF9OkcutzzJePq1c/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS12ZWN0b3Iv/b25saW5lLWRvY3Rv/ci1hcHBvaW50bWVu/dC1tb2JpbGUtcGhv/bmVfMjMtMjE0ODUx/ODAyMi5qcGc_c2l6/ZT02MjYmZXh0PWpw/Zw" class="img-fluid" alt="Book Appointment" style="width: 250px; height: 100px;object-fit:contain">
+                            <p>Book Appointment</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="nav-link" href="{% url 'appointments' %}">
+                            <img src="https://www.jotform.com/blog/wp-content/uploads/2020/05/5-best-medical-appointment-scheduling-software-solutions.png" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <p>Your Appointments</p>
+                        </a>
+                    </div>
+                {% elif request.user.is_doctor %}
+                    <div class="col-md-3">
+                        <a class="nav-link" href="{% url 'appointments' %}">
+                            <img src="https://www.jotform.com/blog/wp-content/uploads/2020/05/5-best-medical-appointment-scheduling-software-solutions.png" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <p>Manage patients Appointments</p>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            </center>
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </form>
+            {% endif %}
+
+            <center>
+                <div id="quote-container">
+                    <p id="quote"></p>
+                </div>
+
+                <script>
+                    // Define an array of health quotes
+                    var quotes = [
+                        "Your health is your wealth.",
+                        "Take care of your body. It's the only place you have to live.",
+                        "The greatest wealth is health.",
+                        "A healthy outside starts from the inside.",
+                        "The first wealth is health.",
+                        "Good health is not something we can buy. It's something we can cultivate.",
+                        "Your body hears everything your mind says. Stay positive.",
+                        "Health is a state of body. Wellness is a state of being.",
+                        "Invest in your health. You'll thank yourself later.",
+                        "A healthy lifestyle is a journey of small steps.",
+                        "Your health is an investment, not an expense.",
+                        "Take care of your body. It's the only place you have to live.",
+                        "The groundwork for all happiness is good health.",
+                        "The greatest medicine of all is to teach people how not to need it.",
+                        "The best doctor gives the least medicines.",
+                        "The best way to predict your future health is to create it.",
+                        "Your health is an investment, not an expense.",
+                        "A healthy outside starts from the inside.",
+                        "The greatest wealth is health.",
+                        "Good health is not something we can buy. It's something we can cultivate.",
+                        "Your body hears everything your mind says. Stay positive.",
+                        "Health is a state of body. Wellness is a state of being.",
+                        "Invest in your health. You'll thank yourself later.",
+                        "A healthy lifestyle is a journey of small steps.",
+                        "Your health is an investment, not an expense.",
+                        "Take care of your body. It's the only place you have to live."
+                    ];
+
+                    // Function to display a random quote with typing effect
+                    function displayQuote() {
+                        var randomIndex = Math.floor(Math.random() * quotes.length);
+                        var quoteElement = document.getElementById("quote");
+                        var quoteText = quotes[randomIndex];
+                        var index = 0;
+                        var typingEffect = setInterval(function() {
+                            if (index < quoteText.length) {
+                                quoteElement.innerHTML += quoteText.charAt(index);
+                                index++;
+                            } else {
+                                clearInterval(typingEffect);
+                                setTimeout(function() {
+                                    removeQuote();
+                                }, 3000);
+                            }
+                        }, 100);
+                    }
+
+                    // Function to remove the quote with typing effect
+                    function removeQuote() {
+                        var quoteElement = document.getElementById("quote");
+                        var quoteText = quoteElement.innerHTML;
+                        var index = quoteText.length - 1;
+                        var typingEffect = setInterval(function() {
+                            if (index >= 0) {
+                                quoteElement.innerHTML = quoteText.slice(0, index);
+                                index--;
+                            } else {
+                                clearInterval(typingEffect);
+                                setTimeout(function() {
+                                    displayQuote();
+                                }, 2000);
+                            }
+                        }, 50);
+                    }
+
+                    // Initial quote display
+                    displayQuote();
+                </script>
+            </center>
+        </div>
+    </div>
+
 {% endblock %}

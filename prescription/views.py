@@ -9,8 +9,14 @@ from .forms import AppointmentForm, PrescriptionForm
 from users.models import Patient, Doctor
 from django.views import View
 
+
+@login_required()
 def book_appointment(request):
-    if request.method == 'POST':
+    if request.user.is_patient and not  Patient.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_doctor and  not Doctor.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_authenticated and request.user.is_patient and request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
@@ -50,6 +56,8 @@ def get_available_times(request):
         available.append(time[0])
     return JsonResponse(available, safe=False)
 
+
+@login_required()
 def appointment_list(request):
     if request.user.is_authenticated:
         try:
@@ -71,6 +79,10 @@ def appointment_list(request):
 
 @login_required()
 def confirm_appointment(request, pk):
+    if request.user.is_patient and not  Patient.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_doctor and  not Doctor.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
     if request.user.is_authenticated and request.user.is_doctor:
         appointment = Appointment.objects.get(pk=pk)
         if appointment.doctor == request.user.doctor:
@@ -88,6 +100,10 @@ def confirm_appointment(request, pk):
 
 @login_required()
 def cancel_appointment(request, pk):
+    if request.user.is_patient and not  Patient.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_doctor and  not Doctor.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
     if request.user.is_authenticated and request.user.is_doctor:
         appointment = Appointment.objects.get(pk=pk)
         if appointment.doctor == request.user.doctor:
@@ -108,6 +124,10 @@ def cancel_appointment(request, pk):
 
 
 def prescribe_medicine(request, appointment_id):
+    if request.user.is_patient and not  Patient.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_doctor and  not Doctor.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
     if request.method == 'POST':
         appointment_id = request.POST.get('appointment_id')
         prescription = request.POST.getlist('medicines')
@@ -130,6 +150,10 @@ def prescribe_medicine(request, appointment_id):
 
 
 def patient_prescriptions(request, appointment_id):
+    if request.user.is_patient and not  Patient.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
+    if request.user.is_doctor and  not Doctor.objects.filter(user__email=request.user.email).exists():
+        return redirect('home')
     prescriptions = Prescription.objects.filter(appointment__id=appointment_id)
     return render(request, 'patient_prescriptions.html', {'prescriptions': prescriptions})
 
@@ -148,3 +172,4 @@ class SearchMedicineView(View):
         )
         medicines_json = list(medicines.values('id', 'name'))
         return JsonResponse(medicines_json, safe=False)
+    

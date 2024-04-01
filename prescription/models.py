@@ -51,7 +51,7 @@ class Prescription(models.Model):
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
     dosage = models.CharField(max_length=255, blank=True, null=True, help_text="Dosage instructions, e.g., '2 tablets'")
     days_to_take = models.IntegerField(validators=[MinValueValidator(1)], blank=True, null=True, help_text="Number of days to take the medicine")
-    times_per_day = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(24)], blank=True, null=True, help_text="Number of times to take the medicine per day")
+    times_per_day = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(24)], blank=True, null=True, help_text="Number of times to take the medicine per day")
     instructions = models.TextField(blank=True,  null=True, help_text="Any additional instructions")
 
     class Meta:
