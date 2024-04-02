@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+
+{% block title %}View Medical Record{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-3">Medical Record</h1>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="control-group form-group">
+                    <div class="controls">
+                        <p><strong>Patient Name:</strong> {{ medical_record.patient_name }}</p>
+                        <p><strong>Record:</strong> {{ medical_record.record }}</p>
+                        <!-- Add more fields as necessary -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

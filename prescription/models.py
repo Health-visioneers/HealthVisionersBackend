@@ -63,3 +63,4 @@ class Prescription(models.Model):
 
     def total_doses(self):
         return self.days_to_take * self.times_per_day
+    

@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+
+{% block title %}Give Access{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-3">Give Access</h1>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Give Access</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

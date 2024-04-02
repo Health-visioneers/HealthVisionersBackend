@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Appointment, Prescription, Medicine
-from .forms import AppointmentForm, PrescriptionForm
+from .forms import AppointmentForm
 from users.models import Patient, Doctor
 from django.views import View
 
