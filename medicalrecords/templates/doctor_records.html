@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-3">Doctor Records</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Record Name</th>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Access Start Time</th>
+                <th scope="col">Access End Time</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for permission in permissions %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{{ permission.medical_record.record.url }}">{{ permission.medical_record.record.name }}</a></td>
+                <td>{{ permission.medical_record.patient.user.get_full_name }}</td>
+                <td>{{ permission.start_time }}</td>
+                <td>{{ permission.end_time }}</td>
+                <td>
+                    <a href="{% url 'view_medical_record' permission.medical_record.id %}" class="btn btn-primary">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -23,6 +24,8 @@ def create_medical_record(request):
         else:
             form = MedicalRecordForm()
         return render(request, 'create_medical_record.html', {'form': form})
+    else:
+        return redirect('home')
 
 
 
@@ -72,8 +75,29 @@ def give_access(request, pk):
 def view_medical_record(request, pk):
     medical_record = get_object_or_404(MedicalRecord, pk=pk)
     now = timezone.now()
-    access_permission = AccessPermission.objects.filter(medical_record=medical_record, doctor=request.user.doctor, start_time__lte=now, end_time__gte=now).first()
+    access_permission = AccessPermission.objects.filter(medical_record=medical_record, doctor=request.user.doctor, start_time__lte=now, end_time__gte=now)  #.first()
+    print(access_permission)
     if access_permission is not None:
         return render(request, 'view_medical_record.html', {'medical_record': medical_record})
     else:
-        return redirect('access_denied')
+        return HttpResponse('access_denied')
+    
+from datetime import datetime 
+   
+@login_required
+def display_records(request):
+    if request.user.is_patient and Patient.objects.filter(user=request.user).exists():
+        records = MedicalRecord.objects.filter(patient=request.user.patient)
+        return render(request, 'patient_records.html', {'records': records})
+    elif request.user.is_doctor and Doctor.objects.filter(user=request.user).exists():
+
+        now = datetime.now()
+        now_without_seconds = now.replace(second=0, microsecond=0)
+        permissions = AccessPermission.objects.filter(
+            doctor=request.user.doctor, 
+            start_time__lte=now_without_seconds, 
+            end_time__gte=now_without_seconds
+        ).distinct()
+        return render(request, 'doctor_records.html', {'permissions': permissions})
+    else:
+        return redirect('home')

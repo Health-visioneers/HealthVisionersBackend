@@ -13,13 +13,12 @@
                     <div class="controls">
                         <p><strong>Patient Name:</strong> {{ medical_record.patient_name }}</p>
                         {% if extension == '.pdf' %}
-                            {% comment %} <canvas id="the-canvas"></canvas>   {{ medical_record.record.url }} {% endcomment %}
-                            <embed
-                                src="http://127.0.0.1:8000{{ medical_record.record.url }}"
-                                type="application/pdf"
-                                width="100%"
-                                height="100%"
-                            />
+                            <canvas id="pdfViewer" style="border: 1px solid black; width: 100%;"></canvas>
+                            <div class="text-center mt-2">
+                                <button id="prev" class="btn btn-primary">Previous</button>
+                                <span id="page_num">1</span> / <span id="page_count">1</span>
+                                <button id="next" class="btn btn-primary">Next</button>
+                            </div>
                         {% elif extension in image_extensions %}
                             <img src="{{ medical_record.record.url }}" alt="Image" />
                         {% else %}
@@ -30,37 +29,79 @@
             </div>
         </div>
     </div>
-    
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 
     <script>
-        var url = "http://127.0.0.1:8000";
+        var url = "{{ medical_record.record.url }}";
 
-        var loadingTask = pdfjsLib.getDocument("http://127.0.0.1:8000{{ medical_record.record.url }}");
-        loadingTask.promise.then(function(pdf) {
-            var pageNumber = 1;
-            pdf.getPage(pageNumber).then(function(page) {
-                var scale = 1.5;
+        var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 1.5,
+            canvas = document.getElementById('pdfViewer'),
+            ctx = canvas.getContext('2d');
+
+        function renderPage(num) {
+            pageRendering = true;
+            pdfDoc.getPage(num).then(function(page) {
                 var viewport = page.getViewport({scale: scale});
-
-                var canvas = document.getElementById('pdf-canvas');
-                var context = canvas.getContext('2d');
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
                 var renderContext = {
-                    canvasContext: context,
+                    canvasContext: ctx,
                     viewport: viewport
                 };
                 var renderTask = page.render(renderContext);
+
                 renderTask.promise.then(function () {
-                    console.log('Page rendered');
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
                 });
             });
+
+            document.getElementById('page_num').textContent = num;
+        }
+
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+        document.getElementById('next').addEventListener('click', onNextPage);
+
+        var loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(function(pdf) {
+            pdfDoc = pdf;
+            document.getElementById('page_count').textContent = pdfDoc.numPages;
+            renderPage(pageNum);
         }, function (reason) {
             console.error(reason);
         });
     </script>
-    
-
 {% endblock %}

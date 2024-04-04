@@ -24,15 +24,27 @@
                     </div>
                     <div class="col-md-3">
                         <a class="nav-link" href="{% url 'appointments' %}">
-                            <img src="https://www.jotform.com/blog/wp-content/uploads/2020/05/5-best-medical-appointment-scheduling-software-solutions.png" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <img src="https://img.freepik.com/free-vector/appointment-booking-with-calendar_52683-39831.jpg" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
                             <p>Your Appointments</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="nav-link" href="{% url 'medicalrecords' %}">
+                            <img src="https://static.vecteezy.com/system/resources/previews/009/902/425/original/medical-records-icon-illustration-vector.jpg" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <p>Medical  Records</p>
                         </a>
                     </div>
                 {% elif request.user.is_doctor %}
                     <div class="col-md-3">
                         <a class="nav-link" href="{% url 'appointments' %}">
-                            <img src="https://www.jotform.com/blog/wp-content/uploads/2020/05/5-best-medical-appointment-scheduling-software-solutions.png" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <img src="https://img.freepik.com/free-vector/appointment-booking-with-calendar_52683-39831.jpg" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
                             <p>Manage patients Appointments</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="nav-link" href="{% url 'medicalrecords' %}">
+                            <img src="https://static.vecteezy.com/system/resources/previews/009/902/425/original/medical-records-icon-illustration-vector.jpg" class="img-fluid" alt="Your Appointments" style="width: 250px; height: 100px;object-fit:contain">
+                            <p>Your Access of Medical  Records</p>
                         </a>
                     </div>
                 {% endif %}

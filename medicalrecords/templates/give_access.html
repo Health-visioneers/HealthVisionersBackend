@@ -21,4 +21,19 @@
             </div>
         </div>
     </div>
+    <script>
+        window.onload = function() {
+            var startTimeInput = document.getElementById('id_start_time');
+            var endTimeInput = document.getElementById('id_end_time');
+
+            if (startTimeInput) {
+                startTimeInput.type = 'datetime-local';
+            }
+
+            if (endTimeInput) {
+                endTimeInput.type = 'datetime-local';
+            }
+        };
+    </script>
+
 {% endblock %}
