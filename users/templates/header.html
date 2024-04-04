@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'book_appointment' %}">Book Appointment</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_medical_record' %}">upload medical Record</a>
+                </li>
                 {% endif %}
 
                 {% if request.user.is_doctor or  request.user.is_patient %}
