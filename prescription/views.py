@@ -137,7 +137,8 @@ def prescribe_medicine(request, appointment_id):
             prescription.save()
             
         # Redirect to the details page for the appointment
-        appointment = Appointment.objects.filter(id= appointment_id).update(prescription=True)
+        appointment = Appointment.objects.get(id=appointment_id)
+        appointment.prescription = True
         appointment.save()
         
         return redirect('appointments')
